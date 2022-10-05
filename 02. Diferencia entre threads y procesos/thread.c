@@ -5,7 +5,7 @@
 
 int x = 2; //si la variable hubiese sido declarada localmente, sería local a cada thread, y por lo tanto cada thread modificaría su propia variable x.
 
-void* rutina() {
+void* incMails() {
     /*Obtenemos el mismo PID porque en realidad ambos hilos se están ejecutando en el mismo proceso: un proceso puede tener varios hilos de ejecución, pero un hilo no puede tener varios procesos.
     Otra cuestión a tener en cuenta es el espacio de memoria: cuando forkeamos un proceso, estamos duplicando todas las variables, espacio de memoria, etc. Cuando trabajamos con threads, todos tienen acceso al mismo set de variables, comparten el espacio de direccionamiento. 
     */
@@ -22,7 +22,7 @@ void* rutina2() {
 
 int main(int argc, char const *argv[]) {
     pthread_t t1, t2;
-    if (pthread_create(&t1, NULL, &rutina, NULL) != 0) {
+    if (pthread_create(&t1, NULL, &incMails, NULL) != 0) {
         return 1;
     }
     if (pthread_create(&t2, NULL, &rutina2, NULL) != 0) {
