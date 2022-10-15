@@ -39,17 +39,26 @@ Para solucionar este problema, usamos un mutex: es una especie de lock alrededor
 
 int main(int argc, char const *argv[]) {
     //Creamos un thread/hilo
-    pthread_t t1, t2, t3, t4;
+    pthread_t th[4];
     pthread_mutex_init(&mutex, NULL);
-    if (pthread_create(&t1, NULL, incMails, NULL) != 0) { return 1; }
-    if (pthread_create(&t2, NULL, incMails, NULL) != 0) { return 1; }
-    if (pthread_create(&t3, NULL, incMails, NULL) != 0) { return 1; }
-    if (pthread_create(&t4, NULL, incMails, NULL) != 0) { return 1; }
 
-    if (pthread_join(t1, NULL) != 0) { return 2; }
-    if (pthread_join(t2, NULL) != 0) { return 2; }
-    if (pthread_join(t3, NULL) != 0) { return 2; }
-    if (pthread_join(t4, NULL) != 0) { return 2; }
+    for (int i = 0; i < 4; i++) {
+        if (pthread_create(&th[i], NULL, incMails, NULL) != 0) {
+            perror("Error al crear el thread.\n");
+            return 1; 
+        }
+        printf("Thread %d has started\n", i);
+    }
+
+    for (int i = 0; i < 4; i++) {
+        if (pthread_join(th[i], NULL) != 0) {
+            return 2; 
+        }
+        printf("Thread %d has finished execution\n", i);
+    }
+
+    /* Cada mensaje que imprime por pantalla no refleja exactamente el orden en el que los threads terminaron su ejecución. Lo que sucede es que, por ejemplo, si el cuarto thread finaliza su ejecución, primero vamos a esperar por el primer thread, con lo cual esos mensajes en la terminal corresponden a la forma en la que iteramos sobre el arreglo de threads.
+    */
 
     pthread_mutex_destroy(&mutex);
 
