@@ -9,7 +9,7 @@
 sem_t semaphore;
 
 void* routine(void* args) {
-    sem_wait(&semaphore); //chequea el valor del semáforo. Si el valor del semáforo es 0, y no puede ser decrementado, entonces el thread va a esperar en ese semáforo. Si es mayor a cero (por ejemplo, 5), entonces lo decrementará y no esperará, sino que empezará a ejecutar.
+    sem_wait(&semaphore); //chequea el valor del semáforo. Si el valor del semáforo es 0, y no puede ser decrementado, entonces el thread que lo quiso decrementar va a esperar en ese semáforo. Si es mayor a cero (por ejemplo, 5), entonces lo decrementará y no esperará, sino que empezará a ejecutar.
     sleep(1);
     printf("Hello from thread %d\n", *(int*)args);
     sem_post(&semaphore); //hace el "reverso": en lugar de decrementar, por ejemplo de 5 a 4, lo incrementa de 4 a 5 una vez que termina la ejecución, y no espera ni nada.
